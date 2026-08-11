@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supermercado Nosso Lar - O Mercado da Nossa Cidade</title>
+    <style>
+        :root {
+            --primary: #15803d;
+            --primary-dark: #166534;
+            --primary-light: #dcfce7;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --gray-light: #f1f5f9;
+            --gray-border: #e2e8f0;
+            --text: #334155;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: var(--text);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* HEADER E NAVEGAÇÃO */
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-badge {
+            background-color: var(--accent);
+            color: #000;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .logo-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 450px;
+            display: flex;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px 0 0 8px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .search-bar button {
+            background-color: var(--accent);
+            border: none;
+            padding: 0 16px;
+            border-radius: 0 8px 8px 0;
+            cursor: pointer;
+            font-weight: bold;
+            color: #1e293b;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-header {
+            background-color: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 8px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-header:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+
+        .cart-count {
+            background-color: var(--accent);
+            color: #000;
+            font-weight: bold;
+            border-radius: 50%;
+            padding: 2px 7px;
+            font-size: 0.8rem;
+        }
+
+        /* BANNER PRINCIPAL */
+        .hero-banner {
+            background: linear-gradient(135deg, #166534 0%, #15803d 100%);
+            color: white;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .hero-banner h1 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        .hero-banner p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 700px;
+            margin: 0 auto 15px auto;
+        }
+
+        .hero-tags {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-tag {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+        }
+
+        /* LAYOUT PRINCIPAL */
+        .main-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+        }
+
+        /* MENU LATERAL DE CATEGORIAS */
+        .sidebar {
+            width: 250px;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 1.2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--primary-light);
+        }
+
+        .category-list {
+            list-style: none;
+        }
+
+        .category-item {
+            padding: 10px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .category-item:hover, .category-item.active {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            font-weight: bold;
+        }
+
+        /* GRADE DE PRODUTOS */
+        .content-area {
+            flex: 1;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            color: var(--dark);
+            margin-bottom: 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-border);
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        }
+
+        .product-img {
+            height: 150px;
+            width: 100%;
+            object-fit: cover;
+            background-color: var(--gray-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .badge-local {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background-color: var(--primary-dark);
+            color: white;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+
+        .product-info {
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-unit {
+            font-size: 0.8rem;
+            color: #64748b;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-footer {
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .product-price {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary-dark);
+        }
+
+        .btn-add {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+
+        .btn-add:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* MODAL DO CARRINHO DE COMPRAS */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: flex-end;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .cart-drawer {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        .cart-header {
+            padding: 1.2rem;
+            background: var(--primary-dark);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-header h2 {
+            font-size: 1.2rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-body {
+            padding: 1rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid var(--gray-border);
+        }
+
+        .cart-item-info h4 {
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .cart-item-info p {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .cart-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-qty {
+            background: var(--gray-light);
+            border: 1px solid var(--gray-border);
+            width: 26px;
+            height: 26px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .cart-footer {
+            padding: 1.2rem;
+            border-top: 2px solid var(--gray-border);
+            background: #fafafa;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+
+        .summary-row.total {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary-dark);
+            margin-top: 0.8rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed var(--gray-border);
+        }
+
+        .btn-checkout {
+            width: 100%;
+            background: var(--accent);
+            color: #000;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        /* MODAL DE FORMULÁRIO (PAGAMENTO E CADASTRO) */
+        .form-modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1100;
+            padding: 1rem;
+        }
+
+        .form-modal-container.active {
+            display: flex;
+        }
+
+        .form-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        .form-header {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--dark);
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-border);
+            border-radius: 6px;
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        footer {
+            background: var(--dark);
+            color: #94a3b8;
+            text-align: center;
+            padding: 2rem 1rem;
+            margin-top: auto;
+            font-size: 0.85rem;
+        }
+
+        footer strong {
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+            }
+            .search-bar {
+                order: 3;
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER / TOPO DO SITE -->
+    <header>
+        <div class="header-container">
+            <div class="logo-area">
+                <span class="logo-title">🛒 Mercado Nosso Lar</span>
+                <span class="logo-badge">Agro & Cidade</span>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Buscar mandioca, laranja, frango, leite..." onkeyup="filterProductsBySearch()">
+                <button>Buscar</button>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-header" onclick="toggleModal('registerModal')">
+                    👤 Cadastre-se
+                </button>
+                <button class="btn-header" onclick="toggleModal('cartModal')">
+                    🛍️ Carrinho
+                    <span class="cart-count" id="cartBadge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- BANNER DE BOAS-VINDAS -->
+    <section class="hero-banner">
+        <h1>O Mercado da Nossa Cidade, Agora a Um Clique!</h1>
+        <p>Produtos novos direto dos produtores locais (mandioca, laranja, aves) e entregues com rapidez no seu bairro.</p>
+        <div class="hero-tags">
+            <span class="hero-tag">🌱 Apoie o Produtor Local</span>
+            <span class="hero-tag">🚚 Entrega na Sua Porta</span>
+            <span class="hero-tag">💳 Pagamento na Entrega ou PIX</span>
+        </div>
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL (CATEGORIAS + PRODUTOS) -->
+    <div class="main-container">
+        
+        <!-- MENU LATERAL -->
+        <aside class="sidebar">
+            <h3>Categorias</h3>
+            <ul class="category-list">
+                <li class="category-item active" onclick="filterCategory('todos', this)">
+                    <span>📦 Todos os Produtos</span>
+                </li>
+                <li class="category-item" onclick="filterCategory('agro', this)">
+                    <span>🥔 Hortifruti & Agro Local</span>
+                </li>
+                <li class="category-item" onclick="filterCategory('carnes', this)">
+                    <span>🍗 Açougue & Aves</span>
+                </li>
+                <li class="category-item" onclick="filterCategory('mercearia', this)">
+                    <span>🌾 Mercearia & Grãos</span>
+                </li>
+                <li class="category-item" onclick="filterCategory('padaria', this)">
+                    <span>🥖 Padaria & Laticínios</span>
+                </li>
+                <li class="category-item" onclick="filterCategory('limpeza', this)">
+                    <span>🧹 Limpeza e Casa</span>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- LISTA DE PRODUTOS -->
+        <main class="content-area">
+            <div class="section-title">
+                <h2 id="currentCategoryTitle">Todos os Produtos</h2>
+                <small style="font-size: 0.9rem; color: #64748b;" id="productCount">10 produtos disponíveis</small>
+            </div>
+
+            <div class="products-grid" id="productsGrid">
+                <!-- Produtos renderizados via JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL DO CARRINHO -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="cart-drawer">
+            <div class="cart-header">
+                <h2>🛍️ Seu Carrinho</h2>
+                <button class="close-btn" onclick="toggleModal('cartModal')">×</button>
+            </div>
+            <div class="cart-body" id="cartItemsContainer">
+                <!-- Itens inseridos via JavaScript -->
+            </div>
+            <div class="cart-footer">
+                <div class="summary-row">
+                    <span>Subtotal:</span>
+                    <span id="cartSubtotal">R$ 0,00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Taxa de Entrega (Cidade):</span>
+                    <span id="cartDelivery">R$ 5,00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total Final:</span>
+                    <span id="cartTotal">R$ 5,00</span>
+                </div>
+                <button class="btn-checkout" onclick="proceedToCheckout()">Finalizar Pedido</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT / FINALIZAR COMPRA -->
+    <div class="form-modal-container" id="checkoutModal">
+        <div class="form-modal">
+            <div class="form-header">
+                <h3>📋 Finalizar Compra - Dados de Entrega</h3>
+                <button class="close-btn" onclick="toggleModal('checkoutModal')">×</button>
+            </div>
+            <div class="form-body">
+                <form onsubmit="finishOrder(event)">
+                    <div class="form-group">
+                        <label>Nome Completo:</label>
+                        <input type="text" required placeholder="Ex: João da Silva">
+                    </div>
+                    <div class="form-group">
+                        <label>Endereço e Número:</label>
+                        <input type="text" required placeholder="Ex: Rua Paraná, 123 - Centro">
+                    </div>
+                    <div class="form-group">
+                        <label>Telefone / WhatsApp:</label>
+                        <input type="text" required placeholder="(44) 99999-8888">
+                    </div>
+                    <div class="form-group">
+                        <label>Forma de Pagamento:</label>
+                        <select required>
+                            <option value="pix">PIX (Chave na Entrega)</option>
+                            <option value="dinheiro">Dinheiro (Precisa de troco?)</option>
+                            <option value="cartao">Cartão de Débito/Crédito na Entrega</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-submit">✅ Confirmar e Enviar Pedido</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO -->
+    <div class="form-modal-container" id="registerModal">
+        <div class="form-modal">
+            <div class="form-header">
+                <h3>👤 Cadastro de Cliente Local</h3>
+                <button class="close-btn" onclick="toggleModal('registerModal')">×</button>
+            </div>
+            <div class="form-body">
+                <form onsubmit="submitRegister(event)">
+                    <div class="form-group">
+                        <label>Nome Completo:</label>
+                        <input type="text" required placeholder="Digite seu nome">
+                    </div>
+                    <div class="form-group">
+                        <label>E-mail ou WhatsApp:</label>
+                        <input type="text" required placeholder="contato@email.com ou telefone">
+                    </div>
+                    <div class="form-group">
+                        <label>Bairro na Cidade:</label>
+                        <input type="text" required placeholder="Ex: Centro, Vila Nova, Zona Rural">
+                    </div>
+                    <button type="submit" class="btn-submit">Criar Conta no Supermercado</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <p><strong>Supermercado Nosso Lar</strong> © 2026 - Desenvolvido pela Turma do 2º Ano de Programação.</p>
+        <p>Conectando a agricultura local, os pequenos comércios e a tecnologia da nossa cidade!</p>
+    </footer>
+
+    <!-- LÓGICA EM JAVASCRIPT -->
+    <script>
+        // Banco de dados simulado com itens da região
+        const products = [
+            { id: 1, name: "Mandioca Amarela Descascada 1kg", category: "agro", price: 4.99, icon: "🥔", isLocal: true, unit: "Pacote 1kg - Agricultura Local" },
+            { id: 2, name: "Laranja Pera Fresca 1kg", category: "agro", price: 3.89, icon: "🍊", isLocal: true, unit: "Saco 1kg - Pomar da Região" },
+            { id: 3, name: "Frango Inteiro Resfriado (kg)", category: "carnes", price: 11.90, icon: "🍗", isLocal: true, unit: "Quilo - Aviário Local" },
+            { id: 4, name: "Arroz Tipo 1 - 5kg", category: "mercearia", price: 26.90, icon: "🌾", isLocal: false, unit: "Pacote 5kg" },
+            { id: 5, name: "Feijão Carioca 1kg", category: "mercearia", price: 7.50, icon: "🫘", isLocal: false, unit: "Pacote 1kg" },
+            { id: 6, name: "Leite Integral 1 Litro", category: "padaria", price: 4.69, icon: "🥛", isLocal: false, unit: "Caixa 1L" },
+            { id: 7, name: "Pão Francês Quentinho (kg)", category: "padaria", price: 13.90, icon: "🥖", isLocal: true, unit: "Produção Própria do Mercado" },
+            { id: 8, name: "Queijo Mussarela Fatiado 200g", category: "padaria", price: 9.80, icon: "🧀", isLocal: false, unit: "Bandeja 200g" },
+            { id: 9, name: "Detergente Líquido 500ml", category: "limpeza", price: 2.49, icon: "🧴", isLocal: false, unit: "Frasco 500ml" },
+            { id: 10, name: "Café Torrado e Moído 500g", category: "mercearia", price: 16.90, icon: "☕", isLocal: false, unit: "Pacote 500g" }
+        ];
+
+        let cart = [];
+
+        // Renderizar Produtos na Tela
+        function renderProducts(itemsToRender) {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = "";
+
+            if (itemsToRender.length === 0) {
+                grid.innerHTML = `<p style="grid-column: 1/-1; text-align: center; color: #64748b; padding: 2rem;">Nenhum produto encontrado nesta categoria.</p>`;
+                return;
+            }
+
+            itemsToRender.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card';
+                card.innerHTML = `
+                    <div class="product-img">
+                        ${product.isLocal ? '<span class="badge-local">📍 Agro Local</span>' : ''}
+                        <span>${product.icon}</span>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-title">${product.name}</div>
+                        <div class="product-unit">${product.unit}</div>
+                        <div class="product-footer">
+                            <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                            <button class="btn-add" onclick="addToCart(${product.id})">+ Adicionar</button>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('productCount').innerText = `${itemsToRender.length} produto(s) disponível(is)`;
+        }
+
+        // Filtrar por Categoria
+        function filterCategory(categoryKey, element) {
+            document.querySelectorAll('.category-item').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+
+            const categoryNames = {
+                'todos': 'Todos os Produtos',
+                'agro': 'Hortifruti & Agro Local',
+                'carnes': 'Açougue & Aves',
+                'mercearia': 'Mercearia & Grãos',
+                'padaria': 'Padaria & Laticínios',
+                'limpeza': 'Limpeza e Casa'
+            };
+
+            document.getElementById('currentCategoryTitle').innerText = categoryNames[categoryKey] || 'Produtos';
+
+            if (categoryKey === 'todos') {
+                renderProducts(products);
+            } else {
+                const filtered = products.filter(p => p.category === categoryKey);
+                renderProducts(filtered);
+            }
+        }
+
+        // Busca por Nome
+        function filterProductsBySearch() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = products.filter(p => p.name.toLowerCase().includes(query));
+            renderProducts(filtered);
+        }
+
+        // Adicionar ao Carrinho
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existing = cart.find(item => item.id === productId);
+
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartUI();
+            
+            // Animação leve no contador do carrinho
+            const badge = document.getElementById('cartBadge');
+            badge.style.transform = 'scale(1.3)';
+            setTimeout(() => badge.style.transform = 'scale(1)', 200);
+        }
+
+        // Alterar Quantidade no Carrinho (+ / -)
+        function changeQty(productId, delta) {
+            const item = cart.find(i => i.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cart = cart.filter(i => i.id !== productId);
+            }
+            updateCartUI();
+        }
+
+        // Atualizar a Tela do Carrinho e Cálculos
+        function updateCartUI() {
+            const container = document.getElementById('cartItemsContainer');
+            const badge = document.getElementById('cartBadge');
+            container.innerHTML = "";
+
+            let subtotal = 0;
+            let totalItems = 0;
+
+            if (cart.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: #64748b; margin-top: 2rem;">Seu carrinho está vazio.</p>`;
+            } else {
+                cart.forEach(item => {
+                    subtotal += item.price * item.quantity;
+                    totalItems += item.quantity;
+
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'cart-item';
+                    itemEl.innerHTML = `
+                        <div class="cart-item-info">
+                            <h4>${item.icon} ${item.name}</h4>
+                            <p>R$ ${item.price.toFixed(2).replace('.', ',')} x ${item.quantity} = <strong>R$ ${(item.price * item.quantity).toFixed(2).replace('.', ',')}</strong></p>
+                        </div>
+                        <div class="cart-controls">
+                            <button class="btn-qty" onclick="changeQty(${item.id}, -1)">-</button>
+                            <span>${item.quantity}</span>
+                            <button class="btn-qty" onclick="changeQty(${item.id}, 1)">+</button>
+                        </div>
+                    `;
+                    container.appendChild(itemEl);
+                });
+            }
+
+            const delivery = cart.length > 0 ? 5.00 : 0.00;
+            const total = subtotal + delivery;
+
+            badge.innerText = totalItems;
+            document.getElementById('cartSubtotal').innerText = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cartDelivery').innerText = `R$ ${delivery.toFixed(2).replace('.', ',')}`;
+            document.getElementById('cartTotal').innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        // Abrir/Fechar Modais
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.toggle('active');
+        }
+
+        function proceedToCheckout() {
+            if (cart.length === 0) {
+                alert("Adicione pelo menos um produto ao carrinho antes de finalizar!");
+                return;
+            }
+            toggleModal('cartModal');
+            toggleModal('checkoutModal');
+        }
+
+        function finishOrder(event) {
+            event.preventDefault();
+            alert("🎉 Pedido Confirmado com Sucesso!\n\nO Supermercado Nosso Lar já recebeu seu pedido. Obrigado por comprar no comércio local!");
+            cart = [];
+            updateCartUI();
+            toggleModal('checkoutModal');
+        }
+
+        function submitRegister(event) {
+            event.preventDefault();
+            alert("✅ Cadastro realizado com sucesso!\nVocê já pode fazer suas compras no Supermercado Nosso Lar.");
+            toggleModal('registerModal');
+        }
+
+        // Inicializar a lista ao carregar a página
+        renderProducts(products);
+    </script>
+</body>
+</html>
